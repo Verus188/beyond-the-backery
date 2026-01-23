@@ -1341,6 +1341,33 @@ MonoBehaviour:
   currentLevel: 5
   maxXP: 100
   currentXP: 40
+--- !u!1 &1808234637 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 764938426035279754, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+  m_PrefabInstance: {fileID: 2952070619101871842}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1808234643
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808234637}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 930f74de90a657a40b6fd212d7b1edf3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1843589732
 GameObject:
   m_ObjectHideFlags: 0
@@ -1518,6 +1545,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1617370774835889701, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617370774835889701, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617370774835889701, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2202879718312311049, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -1569,7 +1608,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 764938426035279754, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1808234643}
   m_SourcePrefab: {fileID: 100100000, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
 --- !u!4 &6987374577532576661 stripped
 Transform:
