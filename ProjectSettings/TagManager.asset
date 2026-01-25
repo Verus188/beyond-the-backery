@@ -42,5 +42,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: FarBackground
+    uniqueID: 3675579869
+    locked: 0
+  - name: MidBackground
+    uniqueID: 3829793421
+    locked: 0
+  - name: Ground
+    uniqueID: 1774659291
+    locked: 0
+  - name: Entities
+    uniqueID: 2356127645
+    locked: 0
+  - name: FX
+    uniqueID: 1207643587
+    locked: 0
   m_RenderingLayers:
   - Default
