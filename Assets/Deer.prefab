@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2496292506445405801}
   - component: {fileID: 3482073237079250954}
-  - component: {fileID: 883971482076200470}
   - component: {fileID: 195790237664534267}
   - component: {fileID: 2444072661137282951}
   - component: {fileID: 7704574623759770220}
+  - component: {fileID: -4667964008883261072}
   m_Layer: 0
   m_Name: Deer
   m_TagString: Enemy
@@ -95,21 +95,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &883971482076200470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3261574063602461120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8199073cb2b843d459fce058b5db6c1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  player: {fileID: 0}
-  speed: 2.5
-  health: 2
 --- !u!61 &195790237664534267
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -205,3 +190,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-4667964008883261072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3261574063602461120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5874dfef09eec2342abf07783b102205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeerEnemy
+  player: {fileID: 0}
+  speed: 2.5
+  health: 2
+  hornsSprite: {fileID: 21300000, guid: 793392957aa84064599eb2731458fb30, type: 3}
+  noHornsParameter: NoHorns

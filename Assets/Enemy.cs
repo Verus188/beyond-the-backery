@@ -6,8 +6,8 @@ public class Enemy : MonoBehaviour
     public float speed = 2.5f;
     public int health = 1;
 
-    private Animator animator;
-    private SpriteRenderer spriteRenderer;
+    protected Animator animator;
+    protected SpriteRenderer spriteRenderer;
 
     void Start()
     {
@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
         health -= damage;
 
