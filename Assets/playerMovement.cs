@@ -19,21 +19,18 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Player movement
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         
         Vector2 movement = new Vector2(horizontal, vertical).normalized;
         transform.Translate(movement * speed * Time.deltaTime);
 
-        // Animation
         if (movement.magnitude > 0)
         {
             animator.SetFloat("Horizontal", movement.x);
             animator.SetFloat("Vertical", movement.y);
             animator.SetFloat("Speed", movement.magnitude);
 
-            // Flip sprite for Left direction so we can reuse Right animation
             if (movement.x < 0)
             {
                 spriteRenderer.flipX = true;
@@ -48,13 +45,11 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("Speed", 0);
         }
 
-        // Aiming
         Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 lookDir = mousePos - (Vector2)firePoint.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
         firePoint.rotation = Quaternion.Euler(0, 0, angle);
 
-        // Shooting
         if (Input.GetButtonDown("Fire1"))
         {
             Shoot();
