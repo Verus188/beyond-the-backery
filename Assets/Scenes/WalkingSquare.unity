@@ -449,6 +449,87 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+--- !u!1001 &1624260239
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 764938426035279754, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_Name
+      value: Deer
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617370774835889701, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_Size.x
+      value: 0.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617370774835889701, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_Size.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617370774835889701, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8075056544705612083, guid: 29ae05338bc24594dafb5b0ac11d7b6c, type: 3}
+    - target: {fileID: 1617370774835889701, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710284756927532357, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5405369990869778206, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 6987374577532576661}
+    - target: {fileID: 7688809470249659498, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7d2da92bce5555e44a24bd61368fafe9, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
 --- !u!1 &2000604198 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6258792915741976838, guid: d429b4da03959d6459f45575d49a8009, type: 3}
@@ -643,6 +724,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1105461383175164500}
   - {fileID: 2952070619101871842}
+  - {fileID: 1624260239}
   - {fileID: 978546006}
   - {fileID: 63312684}
   - {fileID: 1480744655}
