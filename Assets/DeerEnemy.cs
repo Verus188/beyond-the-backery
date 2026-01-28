@@ -52,5 +52,8 @@ public class DeerEnemy : Enemy
             sr.sortingLayerID = spriteRenderer.sortingLayerID;
             sr.sortingOrder = spriteRenderer.sortingOrder - 1;
         }
+
+         AutoFadeHorns fadeScript = hornsObj.AddComponent<AutoFadeHorns>();
+        fadeScript.fadeDuration = 6f;
     }
 }
