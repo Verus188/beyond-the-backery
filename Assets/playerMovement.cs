@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour
         mainCamera = Camera.main;
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        CreateBackground();
     }
 
     void Update()
@@ -60,28 +59,5 @@ public class PlayerMovement : MonoBehaviour
     void Shoot()
     {
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-    }
-
-    void CreateBackground()
-    {
-        if (GameObject.Find("Background") != null) return;
-
-        GameObject bg = new GameObject("Background");
-        SpriteRenderer sr = bg.AddComponent<SpriteRenderer>();
-
-        Sprite[] sprites = Resources.LoadAll<Sprite>("snow-tile");
-        if (sprites != null && sprites.Length > 0)
-        {
-            sr.sprite = sprites[0];
-        }
-        else
-        {
-            Debug.LogError("Failed to load background sprite 'snow-tile'");
-        }
-
-        sr.drawMode = SpriteDrawMode.Tiled;
-        sr.size = new Vector2(100, 100);
-        sr.sortingOrder = -100;
-        bg.transform.position = Vector3.zero;
     }
 }
