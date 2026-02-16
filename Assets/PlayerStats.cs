@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class PlayerStats : MonoBehaviour
     public Slider healthBar;
     public Slider levelBar;
     public TextMeshProUGUI levelText; // Цифра уровня
+    public GameObject deathScreen;
     
     [Header("Mock Data")]
     public float maxHealth = 100f;
@@ -15,6 +17,8 @@ public class PlayerStats : MonoBehaviour
     public int currentLevel = 5;
     public float maxXP = 100f;
     public float currentXP = 40f;
+
+    private bool isDead = false;
     
     void Start()
     {
@@ -26,11 +30,18 @@ public class PlayerStats : MonoBehaviour
     void CreateUI()
     {
         // Создаем Canvas, если его нет
-        GameObject canvasObj = new GameObject("PlayerUI");
-        Canvas canvas = canvasObj.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 100; // Гарантируем, что будет выше фона (-100)
-        canvasObj.AddComponent<GraphicRaycaster>();
+        GameObject canvasObj = GameObject.Find("PlayerUI");
+        if (canvasObj == null)
+        {
+            canvasObj = new GameObject("PlayerUI");
+            Canvas canvas = canvasObj.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 100;
+            canvasObj.AddComponent<GraphicRaycaster>();
+        }
+
+        // Создаем экран смерти (скрыт по умолчанию)
+        CreateDeathScreen(canvasObj.transform);
 
         // Создаем контейнер для баров
         GameObject panel = new GameObject("StatsPanel");
@@ -57,6 +68,56 @@ public class PlayerStats : MonoBehaviour
         RectTransform textRect = textObj.GetComponent<RectTransform>();
         textRect.anchoredPosition = new Vector2(210, 0);
         textRect.sizeDelta = new Vector2(100, 30);
+    }
+
+    void CreateDeathScreen(Transform parent)
+    {
+        deathScreen = new GameObject("DeathScreen");
+        deathScreen.transform.SetParent(parent, false);
+        RectTransform dsRect = deathScreen.AddComponent<RectTransform>();
+        dsRect.anchorMin = Vector2.zero;
+        dsRect.anchorMax = Vector2.one;
+        dsRect.sizeDelta = Vector2.zero;
+
+        Image bg = deathScreen.AddComponent<Image>();
+        bg.color = new Color(0, 0, 0, 0.8f);
+
+        GameObject textObj = new GameObject("GameOverText");
+        textObj.transform.SetParent(deathScreen.transform, false);
+        TextMeshProUGUI text = textObj.AddComponent<TextMeshProUGUI>();
+        text.text = "GAME OVER";
+        text.fontSize = 50; // Уменьшил с 72
+        text.color = Color.red;
+        text.alignment = TextAlignmentOptions.Center;
+        text.enableWordWrapping = false; // Отключил перенос
+        RectTransform textRect = textObj.GetComponent<RectTransform>();
+        textRect.sizeDelta = new Vector2(400, 100); // Увеличил область для текста
+        textRect.anchoredPosition = new Vector2(0, 50);
+
+        GameObject btnObj = new GameObject("RestartButton");
+        btnObj.transform.SetParent(deathScreen.transform, false);
+        Image btnImg = btnObj.AddComponent<Image>();
+        btnImg.color = Color.white;
+        Button btn = btnObj.AddComponent<Button>();
+        RectTransform btnRect = btnObj.GetComponent<RectTransform>();
+        btnRect.sizeDelta = new Vector2(160, 45); // Немного уменьшил кнопку
+        btnRect.anchoredPosition = new Vector2(0, -50);
+
+        GameObject btnTextObj = new GameObject("Text");
+        btnTextObj.transform.SetParent(btnObj.transform, false);
+        TextMeshProUGUI btnText = btnTextObj.AddComponent<TextMeshProUGUI>();
+        btnText.text = "RESTART";
+        btnText.color = Color.black;
+        btnText.fontSize = 20; // Уменьшил с 24
+        btnText.alignment = TextAlignmentOptions.Center;
+        btnText.enableWordWrapping = false; // Отключил перенос
+        RectTransform btnTextRect = btnTextObj.GetComponent<RectTransform>();
+        btnTextRect.anchorMin = Vector2.zero;
+        btnTextRect.anchorMax = Vector2.one;
+        btnTextRect.sizeDelta = Vector2.zero;
+
+        btn.onClick.AddListener(RestartGame);
+        deathScreen.SetActive(false);
     }
 
     Slider CreateSlider(Transform parent, string name, Color color, Vector2 pos)
@@ -106,7 +167,9 @@ public class PlayerStats : MonoBehaviour
     
     void Update()
     {
-        // Моковая логика для теста (удали потом)
+        if (isDead) return;
+
+        // Моковая логика для теста
         if (Input.GetKeyDown(KeyCode.H))
             TakeDamage(10f);
         if (Input.GetKeyDown(KeyCode.Q))
@@ -117,13 +180,17 @@ public class PlayerStats : MonoBehaviour
     
     void SetupSliders()
 {
-    healthBar.minValue = 0f;
-    healthBar.maxValue = maxHealth;
-    healthBar.value = currentHealth;
+    if (healthBar != null) {
+        healthBar.minValue = 0f;
+        healthBar.maxValue = maxHealth;
+        healthBar.value = currentHealth;
+    }
     
-    levelBar.minValue = 0f;
-    levelBar.maxValue = maxXP;
-    levelBar.value = currentXP;
+    if (levelBar != null) {
+        levelBar.minValue = 0f;
+        levelBar.maxValue = maxXP;
+        levelBar.value = currentXP;
+    }
 }
 
 void UpdateUI()
@@ -138,13 +205,21 @@ void UpdateUI()
     
     public void TakeDamage(float damage)
     {
+        if (isDead) return;
+
         currentHealth -= damage;
         currentHealth = Mathf.Max(0f, currentHealth);
         UpdateUI();
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
     
     public void Heal(float amount)
     {
+        if (isDead) return;
         currentHealth += amount;
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         UpdateUI();
@@ -152,6 +227,7 @@ void UpdateUI()
     
     public void AddXP(float xp)
 {
+    if (isDead) return;
     currentXP += xp;
     
     if (currentXP >= maxXP - 0.1f) 
@@ -159,13 +235,29 @@ void UpdateUI()
         currentLevel++;
         currentXP = 0f;
         maxXP += 20f;
-        levelBar.maxValue = maxXP;
+        if (levelBar != null) levelBar.maxValue = maxXP;
     }
     
-    levelBar.value = currentXP;
+    if (levelBar != null) levelBar.value = currentXP;
     
     UpdateUI();
 }
+
+    void Die()
+    {
+        isDead = true;
+        Time.timeScale = 0f; // Пауза игры
+        if (deathScreen != null)
+        {
+            deathScreen.SetActive(true);
+        }
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f; // Снимаем паузу
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }
 
 // H - получить урон
