@@ -205,5 +205,7 @@ MonoBehaviour:
   player: {fileID: 0}
   speed: 2.5
   health: 2
+  damage: 15
+  damageInterval: 1
   hornsSprite: {fileID: 21300000, guid: 793392957aa84064599eb2731458fb30, type: 3}
   noHornsParameter: NoHorns

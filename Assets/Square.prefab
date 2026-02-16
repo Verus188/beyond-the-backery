@@ -103,6 +103,8 @@ GameObject:
   - component: {fileID: 6655557099060550303}
   - component: {fileID: 5042191664816318601}
   - component: {fileID: 8123456789012345678}
+  - component: {fileID: 1112223334445556667}
+  - component: {fileID: 1112223334445556668}
   m_Layer: 0
   m_Name: Square
   m_TagString: Player
@@ -220,3 +222,32 @@ MonoBehaviour:
   currentLevel: 1
   maxXP: 100
   currentXP: 0
+--- !u!58 &1112223334445556667
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6258792915741976838}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_IsTrigger: 0
+  m_Offset: {x: 0, y: 0}
+--- !u!50 &1112223334445556668
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6258792915741976838}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0
+  m_GravityScale: 0
+  m_Constraints: 4

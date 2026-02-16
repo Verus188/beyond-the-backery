@@ -5,9 +5,12 @@ public class Enemy : MonoBehaviour
     public Transform player;
     public float speed = 2.5f;
     public int health = 1;
+    public float damage = 10f;
+    public float damageInterval = 1f;
 
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
+    private float nextDamageTime;
 
     void Start()
     {
@@ -77,6 +80,22 @@ public class Enemy : MonoBehaviour
         if (health <= 0)
         {
             Destroy(gameObject);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (Time.time >= nextDamageTime)
+            {
+                PlayerStats stats = collision.gameObject.GetComponent<PlayerStats>();
+                if (stats != null)
+                {
+                    stats.TakeDamage(damage);
+                    nextDamageTime = Time.time + damageInterval;
+                }
+            }
         }
     }
 }
