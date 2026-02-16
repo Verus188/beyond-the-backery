@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 5358366033481128445}
   - component: {fileID: 6655557099060550303}
   - component: {fileID: 5042191664816318601}
+  - component: {fileID: 8123456789012345678}
   m_Layer: 0
   m_Name: Square
   m_TagString: Player
@@ -199,3 +200,23 @@ MonoBehaviour:
   speed: 5
   bulletPrefab: {fileID: 1057176166889388324, guid: ec2d745dbcec58f44a693f34da575c07, type: 3}
   firePoint: {fileID: 7363967365998155742}
+--- !u!114 &8123456789012345678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6258792915741976838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa7e3e520bcdc5845983386d3377550e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  healthBar: {fileID: 0}
+  levelBar: {fileID: 0}
+  levelText: {fileID: 0}
+  maxHealth: 100
+  currentHealth: 75
+  currentLevel: 1
+  maxXP: 100
+  currentXP: 0
