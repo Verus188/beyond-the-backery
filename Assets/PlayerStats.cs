@@ -226,22 +226,22 @@ void UpdateUI()
     }
     
     public void AddXP(float xp)
-{
-    if (isDead) return;
-    currentXP += xp;
-    
-    if (currentXP >= maxXP - 0.1f) 
     {
-        currentLevel++;
-        currentXP = 0f;
-        maxXP += 20f;
+        if (isDead) return;
+        currentXP += xp;
+
+        while (currentXP >= maxXP)
+        {
+            currentXP -= maxXP;
+            currentLevel++;
+            maxXP += 20f;
+        }
+
         if (levelBar != null) levelBar.maxValue = maxXP;
+        if (levelBar != null) levelBar.value = currentXP;
+
+        UpdateUI();
     }
-    
-    if (levelBar != null) levelBar.value = currentXP;
-    
-    UpdateUI();
-}
 
     void Die()
     {

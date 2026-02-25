@@ -5,12 +5,15 @@ public class Enemy : MonoBehaviour
     public Transform player;
     public float speed = 2.5f;
     public int health = 1;
+    [Header("Drops")]
+    public int xpDropAmount = 5;
     public float damage = 10f;
     public float damageInterval = 1f;
 
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
     private float nextDamageTime;
+    private bool isDead;
 
     void Start()
     {
@@ -75,12 +78,27 @@ public class Enemy : MonoBehaviour
 
     public virtual void TakeDamage(int damage)
     {
+        if (isDead) return;
+
         health -= damage;
 
         if (health <= 0)
         {
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    protected virtual void Die()
+    {
+        if (isDead) return;
+        isDead = true;
+
+        if (xpDropAmount > 0)
+        {
+            ExperiencePickup.Spawn(transform.position, xpDropAmount, spriteRenderer);
+        }
+
+        Destroy(gameObject);
     }
 
     void OnCollisionStay2D(Collision2D collision)

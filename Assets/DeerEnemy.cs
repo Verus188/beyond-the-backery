@@ -5,7 +5,7 @@ public class DeerEnemy : Enemy
     [Header("Deer Specifics")]
     [Tooltip("The sprite to spawn when horns are dropped.")]
     public Sprite hornsSprite;
-    
+
     [Tooltip("The name of the boolean parameter in the Animator to switch to the no-horns animation.")]
     public string noHornsParameter = "NoHorns";
 

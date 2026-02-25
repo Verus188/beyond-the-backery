@@ -110,6 +110,7 @@ MonoBehaviour:
   player: {fileID: 0}
   speed: 2.5
   health: 1
+  xpDropAmount: 5
   damage: 10
   damageInterval: 1
 --- !u!61 &3412680877033680077
