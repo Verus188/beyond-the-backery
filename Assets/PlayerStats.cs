@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -14,6 +15,9 @@ public class PlayerStats : MonoBehaviour
     [Header("Audio")]
     public AudioClip playerDamageSound;
     private const float PlayerDamageSoundVolume = 0.35f;
+    [Header("Damage Flash")]
+    public Color damageFlashColor = new Color(1f, 0.35f, 0.35f, 1f);
+    public float damageFlashDuration = 0.08f;
 
     [Header("Mock Data")]
     public float maxHealth = 100f;
@@ -32,6 +36,9 @@ public class PlayerStats : MonoBehaviour
     private float elapsedTime;
     private AudioSource damageAudioSource;
     private bool missingPlayerDamageSoundWarningShown;
+    private SpriteRenderer playerSpriteRenderer;
+    private Color defaultSpriteColor = Color.white;
+    private Coroutine damageFlashCoroutine;
 
     void Start()
     {
@@ -40,6 +47,7 @@ public class PlayerStats : MonoBehaviour
         currentXP = Mathf.Clamp(currentXP, 0f, maxXP);
 
         SetupDamageAudioSource();
+        SetupDamageFlash();
 
         if (healthBar == null)
         {
@@ -270,6 +278,7 @@ public class PlayerStats : MonoBehaviour
         if (isDead) return;
 
         PlayPlayerDamageSound();
+        TriggerDamageFlash();
         currentHealth = Mathf.Max(0f, currentHealth - damage);
         UpdateUI();
 
@@ -361,5 +370,37 @@ public class PlayerStats : MonoBehaviour
             missingPlayerDamageSoundWarningShown = true;
             Debug.LogWarning("[PlayerStats] Player damage sound is not assigned. Set 'Player Damage Sound' in the inspector.");
         }
+    }
+
+    void SetupDamageFlash()
+    {
+        playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        if (playerSpriteRenderer != null)
+        {
+            defaultSpriteColor = playerSpriteRenderer.color;
+        }
+    }
+
+    void TriggerDamageFlash()
+    {
+        if (playerSpriteRenderer == null || damageFlashDuration <= 0f)
+        {
+            return;
+        }
+
+        if (damageFlashCoroutine != null)
+        {
+            StopCoroutine(damageFlashCoroutine);
+        }
+
+        damageFlashCoroutine = StartCoroutine(DamageFlashRoutine());
+    }
+
+    IEnumerator DamageFlashRoutine()
+    {
+        playerSpriteRenderer.color = damageFlashColor;
+        yield return new WaitForSeconds(damageFlashDuration);
+        playerSpriteRenderer.color = defaultSpriteColor;
+        damageFlashCoroutine = null;
     }
 }

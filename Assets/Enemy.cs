@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -12,9 +13,14 @@ public class Enemy : MonoBehaviour
     [Header("Audio")]
     public AudioClip damageSound;
     private const float DamageSoundVolume = 0.2f;
+    [Header("Damage Flash")]
+    public Color damageFlashColor = new Color(1f, 0.35f, 0.35f, 1f);
+    public float damageFlashDuration = 0.08f;
 
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
+    private Color defaultSpriteColor = Color.white;
+    private Coroutine damageFlashCoroutine;
     private float nextDamageTime;
     private bool isDead;
 
@@ -22,6 +28,10 @@ public class Enemy : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            defaultSpriteColor = spriteRenderer.color;
+        }
 
         if (player == null)
         {
@@ -84,6 +94,7 @@ public class Enemy : MonoBehaviour
         if (isDead) return;
 
         PlayDamageSound();
+        TriggerDamageFlash();
         health -= damage;
 
         if (health <= 0)
@@ -152,5 +163,28 @@ public class Enemy : MonoBehaviour
         soundSource.Play();
 
         Destroy(soundObject, clip.length + 0.05f);
+    }
+
+    private void TriggerDamageFlash()
+    {
+        if (spriteRenderer == null || damageFlashDuration <= 0f)
+        {
+            return;
+        }
+
+        if (damageFlashCoroutine != null)
+        {
+            StopCoroutine(damageFlashCoroutine);
+        }
+
+        damageFlashCoroutine = StartCoroutine(DamageFlashRoutine());
+    }
+
+    private IEnumerator DamageFlashRoutine()
+    {
+        spriteRenderer.color = damageFlashColor;
+        yield return new WaitForSeconds(damageFlashDuration);
+        spriteRenderer.color = defaultSpriteColor;
+        damageFlashCoroutine = null;
     }
 }
