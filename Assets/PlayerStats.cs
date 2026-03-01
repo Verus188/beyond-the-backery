@@ -27,22 +27,18 @@ public class PlayerStats : MonoBehaviour
     public float flatGrowthPerLevel = 5f;
     public float growthMultiplier = 1.22f;
 
-    private bool isDead = false;
+    private bool isDead;
     private TextMeshProUGUI timerText;
     private float elapsedTime;
-    
+    private AudioSource damageAudioSource;
+    private bool missingPlayerDamageSoundWarningShown;
+
     void Start()
     {
         currentLevel = Mathf.Max(1, currentLevel);
         maxXP = GetRequiredXPForNextLevel(currentLevel);
         currentXP = Mathf.Clamp(currentXP, 0f, maxXP);
 
-        if (healthBar == null) CreateUI();
-    private AudioSource damageAudioSource;
-    private bool missingPlayerDamageSoundWarningShown;
-
-    void Start()
-    {
         SetupDamageAudioSource();
 
         if (healthBar == null)
@@ -53,6 +49,18 @@ public class PlayerStats : MonoBehaviour
         SetupSliders();
         UpdateUI();
         UpdateTimerUI();
+    }
+
+    void Update()
+    {
+        if (isDead) return;
+
+        elapsedTime += Time.deltaTime;
+        UpdateTimerUI();
+
+        if (Input.GetKeyDown(KeyCode.H)) TakeDamage(10f);
+        if (Input.GetKeyDown(KeyCode.Q)) Heal(15f);
+        if (Input.GetKeyDown(KeyCode.L)) AddXP(10f);
     }
 
     void CreateUI()
@@ -95,6 +103,7 @@ public class PlayerStats : MonoBehaviour
         textRect.pivot = new Vector2(0, 1);
         textRect.anchoredPosition = new Vector2(160, -30);
         textRect.sizeDelta = new Vector2(110, 20);
+
         CreateTimerText(canvasObj.transform);
     }
 
@@ -108,7 +117,6 @@ public class PlayerStats : MonoBehaviour
         timerText.text = "00:00";
         timerText.color = Color.black;
         timerText.alignment = TextAlignmentOptions.TopRight;
-        timerText.enableWordWrapping = false;
 
         RectTransform timerRect = timerObj.GetComponent<RectTransform>();
         timerRect.anchorMin = new Vector2(1, 1);
@@ -138,7 +146,6 @@ public class PlayerStats : MonoBehaviour
         text.fontSize = 50;
         text.color = Color.red;
         text.alignment = TextAlignmentOptions.Center;
-        text.enableWordWrapping = false;
 
         RectTransform textRect = textObj.GetComponent<RectTransform>();
         textRect.sizeDelta = new Vector2(400, 100);
@@ -161,7 +168,6 @@ public class PlayerStats : MonoBehaviour
         btnText.color = Color.black;
         btnText.fontSize = 20;
         btnText.alignment = TextAlignmentOptions.Center;
-        btnText.enableWordWrapping = false;
 
         RectTransform btnTextRect = btnTextObj.GetComponent<RectTransform>();
         btnTextRect.anchorMin = Vector2.zero;
@@ -214,32 +220,6 @@ public class PlayerStats : MonoBehaviour
         return slider;
     }
 
-    void Update()
-    {
-        if (isDead) return;
-        elapsedTime += Time.deltaTime;
-        UpdateTimerUI();
-        if (isDead)
-        {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            TakeDamage(10f);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Heal(15f);
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            AddXP(10f);
-        }
-    }
-
     void SetupSliders()
     {
         if (healthBar != null)
@@ -275,36 +255,22 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-void UpdateUI()
-{
-    if (healthBar != null) 
-        healthBar.value = Mathf.Clamp(currentHealth, 0, maxHealth);
-    if (levelBar != null)
-        levelBar.value = Mathf.Clamp(currentXP, 0, maxXP);
-    if (levelText != null)
-        levelText.text = $"Lv. {currentLevel}";
-}
+    void UpdateTimerUI()
+    {
+        if (timerText == null) return;
 
-void UpdateTimerUI()
-{
-    if (timerText == null) return;
+        int totalSeconds = Mathf.FloorToInt(elapsedTime);
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        timerText.text = $"{minutes:00}:{seconds:00}";
+    }
 
-    int totalSeconds = Mathf.FloorToInt(elapsedTime);
-    int minutes = totalSeconds / 60;
-    int seconds = totalSeconds % 60;
-    timerText.text = $"{minutes:00}:{seconds:00}";
-}
-    
     public void TakeDamage(float damage)
     {
-        if (isDead)
-        {
-            return;
-        }
+        if (isDead) return;
 
         PlayPlayerDamageSound();
-        currentHealth -= damage;
-        currentHealth = Mathf.Max(0f, currentHealth);
+        currentHealth = Mathf.Max(0f, currentHealth - damage);
         UpdateUI();
 
         if (currentHealth <= 0f)
@@ -315,26 +281,15 @@ void UpdateTimerUI()
 
     public void Heal(float amount)
     {
-        if (isDead)
-        {
-            return;
-        }
+        if (isDead) return;
 
-        currentHealth += amount;
-        if (currentHealth > maxHealth)
-        {
-            currentHealth = maxHealth;
-        }
-
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
         UpdateUI();
     }
 
     public void AddXP(float xp)
     {
-        if (isDead)
-        {
-            return;
-        }
+        if (isDead) return;
 
         currentXP += xp;
 

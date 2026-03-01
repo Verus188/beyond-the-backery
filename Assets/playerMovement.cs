@@ -5,28 +5,22 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 5f;
     public GameObject bulletPrefab;
     public Transform firePoint;
-<<<<<<< HEAD
     public float shootRate = 2f;
 
-    private Animator animator;
-    private SpriteRenderer spriteRenderer;
-    private float nextShootTime;
-=======
     [Header("Audio")]
     public AudioClip shootingSound;
     public AudioClip walkSnowSound;
-    // Change this value in code; prefab/inspector values will not override it.
+
     private const float ShootVolume = 0.4f;
     private const float WalkSoundVolume = 0.2f;
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private Camera mainCamera;
     private AudioSource shootAudioSource;
     private AudioSource walkAudioSource;
     private bool missingShootSoundWarningShown;
     private bool missingWalkSoundWarningShown;
->>>>>>> origin/main
+    private float nextShootTime;
 
     void Start()
     {
@@ -67,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        
+
         Vector2 movement = new Vector2(horizontal, vertical).normalized;
         bool isMoving = movement.sqrMagnitude > 0f;
         transform.Translate(movement * speed * Time.deltaTime);
@@ -92,26 +86,19 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("Speed", 0);
         }
 
-        Transform nearestEnemy = FindNearestEnemy();
-        if (nearestEnemy != null)
         UpdateWalkSound(isMoving);
 
-        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 lookDir = mousePos - (Vector2)firePoint.position;
+        Transform nearestEnemy = FindNearestEnemy();
+        if (nearestEnemy == null) return;
+
+        Vector2 lookDir = (Vector2)nearestEnemy.position - (Vector2)firePoint.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
         firePoint.rotation = Quaternion.Euler(0, 0, angle);
 
-        if (Input.GetButtonDown("Fire1"))
+        if (shootRate > 0f && Time.time >= nextShootTime)
         {
-            Vector2 lookDir = (Vector2)nearestEnemy.position - (Vector2)firePoint.position;
-            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-            firePoint.rotation = Quaternion.Euler(0, 0, angle);
-
-            if (shootRate > 0f && Time.time >= nextShootTime)
-            {
-                Shoot();
-                nextShootTime = Time.time + (1f / shootRate);
-            }
+            Shoot();
+            nextShootTime = Time.time + (1f / shootRate);
         }
     }
 
@@ -140,11 +127,6 @@ public class PlayerMovement : MonoBehaviour
     void Shoot()
     {
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-
-        if (ShootVolume <= 0f)
-        {
-            return;
-        }
 
         if (shootingSound != null && shootAudioSource != null)
         {
