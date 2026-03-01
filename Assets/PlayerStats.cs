@@ -68,9 +68,14 @@ public class PlayerStats : MonoBehaviour
         levelText = textObj.AddComponent<TextMeshProUGUI>();
         levelText.fontSize = 18;
         levelText.text = "Lv. 1";
+        levelText.color = Color.black;
+        levelText.alignment = TextAlignmentOptions.MidlineLeft;
         RectTransform textRect = textObj.GetComponent<RectTransform>();
-        textRect.anchoredPosition = new Vector2(210, 0);
-        textRect.sizeDelta = new Vector2(100, 30);
+        textRect.anchorMin = new Vector2(0, 1);
+        textRect.anchorMax = new Vector2(0, 1);
+        textRect.pivot = new Vector2(0, 1);
+        textRect.anchoredPosition = new Vector2(160, -30);
+        textRect.sizeDelta = new Vector2(110, 20);
         CreateTimerText(canvasObj.transform);
     }
 
