@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    private static Material bloodParticleMaterial;
+
     public Transform player;
     public float speed = 2.5f;
     public int health = 3;
@@ -16,6 +18,12 @@ public class Enemy : MonoBehaviour
     [Header("Damage Flash")]
     public Color damageFlashColor = new Color(1f, 0.35f, 0.35f, 1f);
     public float damageFlashDuration = 0.08f;
+    [Header("Death Blood")]
+    public bool spawnBloodOnDeath = true;
+    public Color bloodColor = Color.red;
+    public int bloodParticles = 24;
+    public float bloodBurstSpeed = 4f;
+    public float bloodLifetime = 0.45f;
 
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
@@ -113,6 +121,7 @@ public class Enemy : MonoBehaviour
             ExperiencePickup.Spawn(transform.position, xpDropAmount, spriteRenderer);
         }
 
+        SpawnDeathBloodEffect();
         Destroy(gameObject);
     }
 
@@ -186,5 +195,101 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(damageFlashDuration);
         spriteRenderer.color = defaultSpriteColor;
         damageFlashCoroutine = null;
+    }
+
+    private void SpawnDeathBloodEffect()
+    {
+        if (!spawnBloodOnDeath || bloodParticles <= 0 || bloodLifetime <= 0f)
+        {
+            return;
+        }
+
+        GameObject bloodObject = new GameObject("EnemyBloodBurst");
+        bloodObject.transform.position = transform.position;
+
+        ParticleSystem ps = bloodObject.AddComponent<ParticleSystem>();
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        var main = ps.main;
+        main.playOnAwake = false;
+        main.loop = false;
+        main.duration = 0.12f;
+        main.startLifetime = bloodLifetime;
+        main.startSpeed = bloodBurstSpeed;
+        main.startSize = new ParticleSystem.MinMaxCurve(0.08f, 0.16f);
+        main.startColor = bloodColor;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+        main.maxParticles = Mathf.Max(8, bloodParticles + 8);
+        main.gravityModifier = 0.6f;
+
+        var emission = ps.emission;
+        emission.enabled = true;
+        emission.rateOverTime = 0f;
+        emission.SetBursts(new[]
+        {
+            new ParticleSystem.Burst(0f, (short)bloodParticles)
+        });
+
+        var shape = ps.shape;
+        shape.enabled = true;
+        shape.shapeType = ParticleSystemShapeType.Cone;
+        shape.angle = 35f;
+        shape.radius = 0.08f;
+
+        var colorOverLifetime = ps.colorOverLifetime;
+        colorOverLifetime.enabled = true;
+        Gradient fadeGradient = new Gradient();
+        fadeGradient.SetKeys(
+            new[]
+            {
+                new GradientColorKey(bloodColor, 0f),
+                new GradientColorKey(new Color(0.6f, 0f, 0f, 1f), 1f)
+            },
+            new[]
+            {
+                new GradientAlphaKey(1f, 0f),
+                new GradientAlphaKey(0.2f, 0.7f),
+                new GradientAlphaKey(0f, 1f)
+            }
+        );
+        colorOverLifetime.color = new ParticleSystem.MinMaxGradient(fadeGradient);
+
+        ParticleSystemRenderer psRenderer = bloodObject.GetComponent<ParticleSystemRenderer>();
+        if (psRenderer != null)
+        {
+            psRenderer.material = GetBloodParticleMaterial();
+        }
+
+        ps.Play();
+        Destroy(bloodObject, bloodLifetime + 0.6f);
+    }
+
+    private static Material GetBloodParticleMaterial()
+    {
+        if (bloodParticleMaterial != null)
+        {
+            return bloodParticleMaterial;
+        }
+
+        string[] candidateShaders =
+        {
+            "Universal Render Pipeline/Particles/Unlit",
+            "Particles/Standard Unlit",
+            "Sprites/Default"
+        };
+
+        for (int i = 0; i < candidateShaders.Length; i++)
+        {
+            Shader shader = Shader.Find(candidateShaders[i]);
+            if (shader != null)
+            {
+                bloodParticleMaterial = new Material(shader)
+                {
+                    hideFlags = HideFlags.DontSave
+                };
+                return bloodParticleMaterial;
+            }
+        }
+
+        return null;
     }
 }

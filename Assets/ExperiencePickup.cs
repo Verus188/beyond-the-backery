@@ -16,6 +16,8 @@ public class ExperiencePickup : MonoBehaviour
     public float lifeTime = 15f;
     public float fadeDuration = 5f;
     public float pickupRadius = 0.35f;
+    public float attractionRadius = 2f;
+    public float attractionSpeed = 4f;
     public float hoverAmplitude = 0.08f;
     public float hoverFrequency = 2.2f;
     public AudioClip takeCandySound;
@@ -26,6 +28,7 @@ public class ExperiencePickup : MonoBehaviour
     private float spawnedAt;
     private Vector3 basePosition;
     private float hoverPhase;
+    private Transform playerTransform;
 
     public static ExperiencePickup Spawn(Vector3 position, float xpAmount, SpriteRenderer sourceRenderer = null)
     {
@@ -83,6 +86,9 @@ public class ExperiencePickup : MonoBehaviour
 
     void Update()
     {
+        TryResolvePlayer();
+        ApplyAttraction();
+
         float hoverOffset = Mathf.Sin((Time.time * hoverFrequency) + hoverPhase) * hoverAmplitude;
         transform.position = basePosition + Vector3.up * hoverOffset;
 
@@ -100,6 +106,36 @@ public class ExperiencePickup : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void TryResolvePlayer()
+    {
+        if (playerTransform != null) return;
+
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
+        {
+            playerTransform = playerObject.transform;
+        }
+    }
+
+    private void ApplyAttraction()
+    {
+        if (playerTransform == null || attractionRadius <= 0f || attractionSpeed <= 0f)
+        {
+            return;
+        }
+
+        Vector3 targetPosition = playerTransform.position;
+        targetPosition.z = basePosition.z;
+
+        float distance = Vector3.Distance(basePosition, targetPosition);
+        if (distance > attractionRadius)
+        {
+            return;
+        }
+
+        basePosition = Vector3.MoveTowards(basePosition, targetPosition, attractionSpeed * Time.deltaTime);
     }
 
     void OnTriggerEnter2D(Collider2D other)
