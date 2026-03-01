@@ -12,10 +12,13 @@ public class ExperiencePickup : MonoBehaviour
     public float xpAmount = 5f;
 
     [Header("Pickup")]
-    public float lifeTime = 12f;
+    public float lifeTime = 15f;
+    public float fadeDuration = 5f;
     public float pickupRadius = 0.35f;
 
     private SpriteRenderer spriteRenderer;
+    private Color baseColor;
+    private float spawnedAt;
 
     public static ExperiencePickup Spawn(Vector3 position, float xpAmount, SpriteRenderer sourceRenderer = null)
     {
@@ -64,7 +67,26 @@ public class ExperiencePickup : MonoBehaviour
 
     void Start()
     {
-        Destroy(gameObject, lifeTime);
+        spawnedAt = Time.time;
+        baseColor = spriteRenderer != null ? spriteRenderer.color : Color.white;
+    }
+
+    void Update()
+    {
+        float elapsed = Time.time - spawnedAt;
+        float fadeStart = Mathf.Max(0f, lifeTime - fadeDuration);
+
+        if (spriteRenderer != null && elapsed >= fadeStart)
+        {
+            float fadeProgress = Mathf.Clamp01((elapsed - fadeStart) / Mathf.Max(0.0001f, fadeDuration));
+            float alpha = Mathf.Lerp(baseColor.a, 0f, fadeProgress);
+            spriteRenderer.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+        }
+
+        if (elapsed >= lifeTime)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)

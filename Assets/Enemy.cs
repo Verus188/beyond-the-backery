@@ -4,7 +4,7 @@ public class Enemy : MonoBehaviour
 {
     public Transform player;
     public float speed = 2.5f;
-    public int health = 1;
+    public int health = 3;
     [Header("Drops")]
     public int xpDropAmount = 5;
     public float damage = 10f;
