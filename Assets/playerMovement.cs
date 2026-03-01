@@ -5,14 +5,14 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 5f;
     public GameObject bulletPrefab;
     public Transform firePoint;
+    public float shootRate = 2f;
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private Camera mainCamera;
+    private float nextShootTime;
 
     void Start()
     {
-        mainCamera = Camera.main;
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -45,15 +45,41 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("Speed", 0);
         }
 
-        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 lookDir = mousePos - (Vector2)firePoint.position;
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-        firePoint.rotation = Quaternion.Euler(0, 0, angle);
-
-        if (Input.GetButtonDown("Fire1"))
+        Transform nearestEnemy = FindNearestEnemy();
+        if (nearestEnemy != null)
         {
-            Shoot();
+            Vector2 lookDir = (Vector2)nearestEnemy.position - (Vector2)firePoint.position;
+            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+            firePoint.rotation = Quaternion.Euler(0, 0, angle);
+
+            if (shootRate > 0f && Time.time >= nextShootTime)
+            {
+                Shoot();
+                nextShootTime = Time.time + (1f / shootRate);
+            }
         }
+    }
+
+    Transform FindNearestEnemy()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        Transform nearest = null;
+        float nearestDistance = float.MaxValue;
+        Vector2 currentPosition = transform.position;
+
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy == null) continue;
+
+            float distance = ((Vector2)enemy.transform.position - currentPosition).sqrMagnitude;
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearest = enemy.transform;
+            }
+        }
+
+        return nearest;
     }
 
     void Shoot()
