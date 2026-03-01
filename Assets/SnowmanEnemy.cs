@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class SnowmanEnemy : Enemy
 {
+    private static Material explosionParticleMaterial;
+
     [Header("Snowman Explosion")]
     public float explosionRadius = 1.4f;
     public float explosionDamage = 20f;
@@ -84,8 +86,48 @@ public class SnowmanEnemy : Enemy
         shape.shapeType = ParticleSystemShapeType.Sphere;
         shape.radius = 0.1f;
 
+        ParticleSystemRenderer psRenderer = explosionObject.GetComponent<ParticleSystemRenderer>();
+        if (psRenderer != null)
+        {
+            Material material = GetExplosionParticleMaterial();
+            if (material != null)
+            {
+                psRenderer.material = material;
+            }
+        }
+
         ps.Play();
         Destroy(explosionObject, 1f);
+    }
+
+    private static Material GetExplosionParticleMaterial()
+    {
+        if (explosionParticleMaterial != null)
+        {
+            return explosionParticleMaterial;
+        }
+
+        string[] candidateShaders =
+        {
+            "Universal Render Pipeline/Particles/Unlit",
+            "Particles/Standard Unlit",
+            "Sprites/Default"
+        };
+
+        for (int i = 0; i < candidateShaders.Length; i++)
+        {
+            Shader shader = Shader.Find(candidateShaders[i]);
+            if (shader != null)
+            {
+                explosionParticleMaterial = new Material(shader)
+                {
+                    hideFlags = HideFlags.DontSave
+                };
+                return explosionParticleMaterial;
+            }
+        }
+
+        return null;
     }
 
     private void OnDrawGizmosSelected()

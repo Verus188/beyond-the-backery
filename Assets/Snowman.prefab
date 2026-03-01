@@ -124,7 +124,7 @@ MonoBehaviour:
   explosionRadius: 2
   explosionDamage: 20
   explosionColor: {r: 1, g: 0.6077018, b: 0, a: 1}
-  explosionParticles: 20
+  explosionParticles: 150
 --- !u!61 &3412680877033680077
 BoxCollider2D:
   m_ObjectHideFlags: 0
