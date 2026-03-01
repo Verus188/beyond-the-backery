@@ -220,7 +220,7 @@ MonoBehaviour:
   levelText: {fileID: 0}
   deathScreen: {fileID: 0}
   maxHealth: 100
-  currentHealth: 75
+  currentHealth: 100
   currentLevel: 1
   maxXP: 100
   currentXP: 0

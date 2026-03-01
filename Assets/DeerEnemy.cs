@@ -43,9 +43,18 @@ public class DeerEnemy : Enemy
 
         GameObject hornsObj = new GameObject("DroppedHorns");
         hornsObj.transform.position = transform.position;
+        hornsObj.transform.localScale = Vector3.one * 2.25f;
 
         SpriteRenderer sr = hornsObj.AddComponent<SpriteRenderer>();
         sr.sprite = hornsSprite;
+
+        CircleCollider2D trigger = hornsObj.AddComponent<CircleCollider2D>();
+        trigger.isTrigger = true;
+
+        Rigidbody2D rb = hornsObj.AddComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.simulated = true;
+        rb.gravityScale = 0f;
         
         if (spriteRenderer != null)
         {
@@ -53,7 +62,11 @@ public class DeerEnemy : Enemy
             sr.sortingOrder = spriteRenderer.sortingOrder - 1;
         }
 
-         AutoFadeHorns fadeScript = hornsObj.AddComponent<AutoFadeHorns>();
-        fadeScript.fadeDuration = 6f;
+        HornsDamage hornsDamage = hornsObj.AddComponent<HornsDamage>();
+        hornsDamage.damage = 10f;
+
+        AutoFadeHorns fadeScript = hornsObj.AddComponent<AutoFadeHorns>();
+        fadeScript.totalLifetime = 20f;
+        fadeScript.fadeDuration = 5f;
     }
 }
