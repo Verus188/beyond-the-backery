@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour
     public int xpDropAmount = 5;
     public float damage = 10f;
     public float damageInterval = 1f;
+    [Header("Audio")]
+    public AudioClip damageSound;
+    private const float DamageSoundVolume = 0.2f;
 
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
@@ -80,6 +83,7 @@ public class Enemy : MonoBehaviour
     {
         if (isDead) return;
 
+        PlayDamageSound();
         health -= damage;
 
         if (health <= 0)
@@ -115,5 +119,38 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+    }
+
+    protected virtual AudioClip GetDamageSound()
+    {
+        return damageSound;
+    }
+
+    protected virtual float GetDamageSoundVolume()
+    {
+        return DamageSoundVolume;
+    }
+
+    protected void PlayDamageSound()
+    {
+        AudioClip clip = GetDamageSound();
+        float volume = Mathf.Clamp01(GetDamageSoundVolume());
+
+        if (clip == null || volume <= 0f)
+        {
+            return;
+        }
+
+        GameObject soundObject = new GameObject("EnemyDamageSound");
+        soundObject.transform.position = transform.position;
+
+        AudioSource soundSource = soundObject.AddComponent<AudioSource>();
+        soundSource.clip = clip;
+        soundSource.playOnAwake = false;
+        soundSource.spatialBlend = 0f;
+        soundSource.volume = volume;
+        soundSource.Play();
+
+        Destroy(soundObject, clip.length + 0.05f);
     }
 }

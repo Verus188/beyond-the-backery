@@ -113,6 +113,7 @@ MonoBehaviour:
   xpDropAmount: 5
   damage: 10
   damageInterval: 1
+  damageSound: {fileID: 8300000, guid: 55bc026900cd567439d4581d9e1e703b, type: 3}
 --- !u!61 &3412680877033680077
 BoxCollider2D:
   m_ObjectHideFlags: 0

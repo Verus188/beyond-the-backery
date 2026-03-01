@@ -1,2 +1,15 @@
 fileFormatVersion: 2
 guid: 411d6743a9495ba46b4f75bbd9fc31d3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - bulletPrefab: {instanceID: 0}
+  - firePoint: {instanceID: 0}
+  - shootingSound: {fileID: 8300000, guid: f6d1ae7519e47af40950529d2b45a74f, type: 3}
+  - walkSnowSound: {fileID: 8300000, guid: b8d4f9f1010a23446a3a58280d7f5928, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

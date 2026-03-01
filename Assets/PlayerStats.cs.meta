@@ -1,2 +1,16 @@
 fileFormatVersion: 2
 guid: fa7e3e520bcdc5845983386d3377550e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - healthBar: {instanceID: 0}
+  - levelBar: {instanceID: 0}
+  - levelText: {instanceID: 0}
+  - deathScreen: {instanceID: 0}
+  - playerDamageSound: {fileID: 8300000, guid: a590763f2223bfd43b9785d2b46a3beb, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
