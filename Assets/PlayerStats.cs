@@ -28,7 +28,6 @@ public class PlayerStats : MonoBehaviour
     public float growthMultiplier = 1.22f;
 
     private bool isDead = false;
-<<<<<<< HEAD
     private TextMeshProUGUI timerText;
     private float elapsedTime;
     
@@ -39,7 +38,6 @@ public class PlayerStats : MonoBehaviour
         currentXP = Mathf.Clamp(currentXP, 0f, maxXP);
 
         if (healthBar == null) CreateUI();
-=======
     private AudioSource damageAudioSource;
     private bool missingPlayerDamageSoundWarningShown;
 
@@ -52,7 +50,6 @@ public class PlayerStats : MonoBehaviour
             CreateUI();
         }
 
->>>>>>> origin/main
         SetupSliders();
         UpdateUI();
         UpdateTimerUI();
@@ -219,16 +216,13 @@ public class PlayerStats : MonoBehaviour
 
     void Update()
     {
-<<<<<<< HEAD
         if (isDead) return;
         elapsedTime += Time.deltaTime;
         UpdateTimerUI();
-=======
         if (isDead)
         {
             return;
         }
->>>>>>> origin/main
 
         if (Input.GetKeyDown(KeyCode.H))
         {
@@ -281,7 +275,6 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-<<<<<<< HEAD
 void UpdateUI()
 {
     if (healthBar != null) 
@@ -302,8 +295,6 @@ void UpdateTimerUI()
     timerText.text = $"{minutes:00}:{seconds:00}";
 }
     
-=======
->>>>>>> origin/main
     public void TakeDamage(float damage)
     {
         if (isDead)
