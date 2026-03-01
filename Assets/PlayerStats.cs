@@ -19,12 +19,15 @@ public class PlayerStats : MonoBehaviour
     public float currentXP = 40f;
 
     private bool isDead = false;
+    private TextMeshProUGUI timerText;
+    private float elapsedTime;
     
     void Start()
     {
         if (healthBar == null) CreateUI();
         SetupSliders();
         UpdateUI();
+        UpdateTimerUI();
     }
 
     void CreateUI()
@@ -68,6 +71,27 @@ public class PlayerStats : MonoBehaviour
         RectTransform textRect = textObj.GetComponent<RectTransform>();
         textRect.anchoredPosition = new Vector2(210, 0);
         textRect.sizeDelta = new Vector2(100, 30);
+        CreateTimerText(canvasObj.transform);
+    }
+
+    void CreateTimerText(Transform parent)
+    {
+        GameObject timerObj = new GameObject("TimerText");
+        timerObj.transform.SetParent(parent, false);
+
+        timerText = timerObj.AddComponent<TextMeshProUGUI>();
+        timerText.fontSize = 22;
+        timerText.text = "00:00";
+        timerText.color = Color.black;
+        timerText.alignment = TextAlignmentOptions.TopRight;
+        timerText.enableWordWrapping = false;
+
+        RectTransform timerRect = timerObj.GetComponent<RectTransform>();
+        timerRect.anchorMin = new Vector2(1, 1);
+        timerRect.anchorMax = new Vector2(1, 1);
+        timerRect.pivot = new Vector2(1, 1);
+        timerRect.anchoredPosition = new Vector2(-20, -20);
+        timerRect.sizeDelta = new Vector2(130, 32);
     }
 
     void CreateDeathScreen(Transform parent)
@@ -168,6 +192,8 @@ public class PlayerStats : MonoBehaviour
     void Update()
     {
         if (isDead) return;
+        elapsedTime += Time.deltaTime;
+        UpdateTimerUI();
 
         // Моковая логика для теста
         if (Input.GetKeyDown(KeyCode.H))
@@ -201,6 +227,16 @@ void UpdateUI()
         levelBar.value = Mathf.Clamp(currentXP, 0, maxXP);
     if (levelText != null)
         levelText.text = $"Lv. {currentLevel}";
+}
+
+void UpdateTimerUI()
+{
+    if (timerText == null) return;
+
+    int totalSeconds = Mathf.FloorToInt(elapsedTime);
+    int minutes = totalSeconds / 60;
+    int seconds = totalSeconds % 60;
+    timerText.text = $"{minutes:00}:{seconds:00}";
 }
     
     public void TakeDamage(float damage)
