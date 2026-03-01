@@ -208,5 +208,7 @@ MonoBehaviour:
   xpDropAmount: 10
   damage: 15
   damageInterval: 1
+  damageSound: {fileID: 8300000, guid: 562e81637f7ad5f4fb5b1350239fc5ba, type: 3}
   hornsSprite: {fileID: 21300000, guid: 793392957aa84064599eb2731458fb30, type: 3}
   noHornsParameter: NoHorns
+  deerDamageSound: {fileID: 8300000, guid: 562e81637f7ad5f4fb5b1350239fc5ba, type: 3}

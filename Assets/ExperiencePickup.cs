@@ -7,6 +7,7 @@ using UnityEditor;
 public class ExperiencePickup : MonoBehaviour
 {
     private const string CandyCaneSpritePath = "Assets/Sprites/candy cane.png";
+    private const string TakeCandySoundPath = "Assets/Sounds/takeCandySound.mp3";
 
     [Header("XP")]
     public float xpAmount = 5f;
@@ -17,6 +18,8 @@ public class ExperiencePickup : MonoBehaviour
     public float pickupRadius = 0.35f;
     public float hoverAmplitude = 0.08f;
     public float hoverFrequency = 2.2f;
+    public AudioClip takeCandySound;
+    private const float TakeCandyVolume = 0.2f;
 
     private SpriteRenderer spriteRenderer;
     private Color baseColor;
@@ -67,6 +70,7 @@ public class ExperiencePickup : MonoBehaviour
         rb.simulated = true;
 
         AssignCandyCaneSpriteIfNeeded();
+        AssignTakeCandySoundIfNeeded();
     }
 
     void Start()
@@ -111,6 +115,7 @@ public class ExperiencePickup : MonoBehaviour
         if (stats == null) return;
 
         stats.AddXP(xpAmount);
+        PlayTakeCandySound();
         Destroy(gameObject);
     }
 
@@ -128,5 +133,39 @@ public class ExperiencePickup : MonoBehaviour
 #endif
 
         Debug.LogWarning("[ExperiencePickup] Candy cane sprite not found. Assign a sprite manually.");
+    }
+
+    private void AssignTakeCandySoundIfNeeded()
+    {
+        if (takeCandySound != null) return;
+
+#if UNITY_EDITOR
+        AudioClip clip = AssetDatabase.LoadAssetAtPath<AudioClip>(TakeCandySoundPath);
+        if (clip != null)
+        {
+            takeCandySound = clip;
+            return;
+        }
+#endif
+
+        Debug.LogWarning("[ExperiencePickup] Take candy sound not found. Assign an AudioClip manually.");
+    }
+
+    private void PlayTakeCandySound()
+    {
+        if (takeCandySound == null || TakeCandyVolume <= 0f) return;
+
+        GameObject soundObject = new GameObject("TakeCandySound");
+        soundObject.transform.position = transform.position;
+
+        AudioSource source = soundObject.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        source.spatialBlend = 0f;
+        source.loop = false;
+        source.volume = TakeCandyVolume;
+        source.clip = takeCandySound;
+        source.Play();
+
+        Destroy(soundObject, takeCandySound.length + 0.05f);
     }
 }

@@ -203,6 +203,8 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1057176166889388324, guid: ec2d745dbcec58f44a693f34da575c07, type: 3}
   firePoint: {fileID: 7363967365998155742}
   shootRate: 0.6
+  shootingSound: {fileID: 8300000, guid: f6d1ae7519e47af40950529d2b45a74f, type: 3}
+  walkSnowSound: {fileID: 8300000, guid: b8d4f9f1010a23446a3a58280d7f5928, type: 3}
 --- !u!114 &8123456789012345678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,6 +221,7 @@ MonoBehaviour:
   levelBar: {fileID: 0}
   levelText: {fileID: 0}
   deathScreen: {fileID: 0}
+  playerDamageSound: {fileID: 8300000, guid: a590763f2223bfd43b9785d2b46a3beb, type: 3}
   maxHealth: 100
   currentHealth: 100
   currentLevel: 1

@@ -8,6 +8,9 @@ public class DeerEnemy : Enemy
 
     [Tooltip("The name of the boolean parameter in the Animator to switch to the no-horns animation.")]
     public string noHornsParameter = "NoHorns";
+    [Header("Deer Audio")]
+    public AudioClip deerDamageSound;
+    private const float DeerDamageSoundVolume = 0.2f;
 
     private bool hasDroppedHorns = false;
 
@@ -68,5 +71,20 @@ public class DeerEnemy : Enemy
         AutoFadeHorns fadeScript = hornsObj.AddComponent<AutoFadeHorns>();
         fadeScript.totalLifetime = 20f;
         fadeScript.fadeDuration = 5f;
+    }
+
+    protected override AudioClip GetDamageSound()
+    {
+        if (deerDamageSound != null)
+        {
+            return deerDamageSound;
+        }
+
+        return base.GetDamageSound();
+    }
+
+    protected override float GetDamageSoundVolume()
+    {
+        return DeerDamageSoundVolume;
     }
 }
