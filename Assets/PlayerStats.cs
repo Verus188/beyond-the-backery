@@ -14,9 +14,14 @@ public class PlayerStats : MonoBehaviour
     [Header("Mock Data")]
     public float maxHealth = 100f;
     public float currentHealth = 75f;
-    public int currentLevel = 5;
-    public float maxXP = 100f;
-    public float currentXP = 40f;
+    public int currentLevel = 1;
+    public float maxXP = 50f;
+    public float currentXP = 0f;
+
+    [Header("Level Progression")]
+    public float xpForLevel2 = 50f;
+    public float flatGrowthPerLevel = 5f;
+    public float growthMultiplier = 1.22f;
 
     private bool isDead = false;
     private TextMeshProUGUI timerText;
@@ -24,6 +29,10 @@ public class PlayerStats : MonoBehaviour
     
     void Start()
     {
+        currentLevel = Mathf.Max(1, currentLevel);
+        maxXP = GetRequiredXPForNextLevel(currentLevel);
+        currentXP = Mathf.Clamp(currentXP, 0f, maxXP);
+
         if (healthBar == null) CreateUI();
         SetupSliders();
         UpdateUI();
@@ -275,13 +284,21 @@ void UpdateTimerUI()
         {
             currentXP -= maxXP;
             currentLevel++;
-            maxXP += 20f;
+            maxXP = GetRequiredXPForNextLevel(currentLevel);
         }
 
         if (levelBar != null) levelBar.maxValue = maxXP;
         if (levelBar != null) levelBar.value = currentXP;
 
         UpdateUI();
+    }
+
+    float GetRequiredXPForNextLevel(int level)
+    {
+        int levelStep = Mathf.Max(0, level - 1);
+        float baseValue = xpForLevel2 + (levelStep * flatGrowthPerLevel);
+        float scaledValue = baseValue * Mathf.Pow(growthMultiplier, levelStep);
+        return Mathf.Max(1f, Mathf.Round(scaledValue));
     }
 
     void Die()
