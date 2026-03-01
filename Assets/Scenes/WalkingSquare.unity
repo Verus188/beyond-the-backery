@@ -150,6 +150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   deerPrefab: {fileID: 3261574063602461120, guid: 34351bd0e3841d34aa1036ec27041997, type: 3}
   santaPrefab: {fileID: 764938426035279754, guid: 250dfdc86822e0c4db4f4da7784792f3, type: 3}
+  snowmanPrefab: {fileID: 764938426035279754, guid: b1c76f7d4a9b4b3a9f7a0e8d2c3b4a5f, type: 3}
+  snowmanSpawnChance: 0.25
   mainCam: {fileID: 632527867}
   interval: 3
   offset: 2
