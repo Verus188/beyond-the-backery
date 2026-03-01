@@ -15,10 +15,14 @@ public class ExperiencePickup : MonoBehaviour
     public float lifeTime = 15f;
     public float fadeDuration = 5f;
     public float pickupRadius = 0.35f;
+    public float hoverAmplitude = 0.08f;
+    public float hoverFrequency = 2.2f;
 
     private SpriteRenderer spriteRenderer;
     private Color baseColor;
     private float spawnedAt;
+    private Vector3 basePosition;
+    private float hoverPhase;
 
     public static ExperiencePickup Spawn(Vector3 position, float xpAmount, SpriteRenderer sourceRenderer = null)
     {
@@ -69,10 +73,15 @@ public class ExperiencePickup : MonoBehaviour
     {
         spawnedAt = Time.time;
         baseColor = spriteRenderer != null ? spriteRenderer.color : Color.white;
+        basePosition = transform.position;
+        hoverPhase = Random.Range(0f, Mathf.PI * 2f);
     }
 
     void Update()
     {
+        float hoverOffset = Mathf.Sin((Time.time * hoverFrequency) + hoverPhase) * hoverAmplitude;
+        transform.position = basePosition + Vector3.up * hoverOffset;
+
         float elapsed = Time.time - spawnedAt;
         float fadeStart = Mathf.Max(0f, lifeTime - fadeDuration);
 
